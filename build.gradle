@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.github.sudarshan'
+version = '0.0.1-BETA'
+
+java {
+    sourceCompatibility = '11'
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.projectlombok:lombok:1.18.28'
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.postgresql:postgresql:42.6.0'
+    compileOnly 'org.projectlombok:lombok:1.18.22'
+    annotationProcessor 'org.projectlombok:lombok:1.18.22'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+//    implementation group: 'com.fasterxml.jackson', name: 'annotations', version: '2.11.3'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.11.3'
+//    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jdk8', version: '2.11.3'
+//    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: '2.11.3'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.9'
+    testImplementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j2-impl', version: '2.20.0'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
