@@ -15,14 +15,6 @@ java {
 
 repositories {
     mavenCentral()
-    maven {
-        name 'GitHubPackages'
-        url "https://maven.pkg.github.com/category-manager/category-manager"
-        credentials {
-            username = System.getenv('USERNAME')
-            password = System.getenv('TOKEN')
-        }
-    }
 }
 
 dependencies {
@@ -46,6 +38,16 @@ dependencies {
     testImplementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j2-impl', version: '2.20.0'
 }
 publishing {
+    repositories {
+        maven {
+            name 'GitHubPackages'
+            url "https://maven.pkg.github.com/category-manager/category-manager"
+            credentials {
+                username = System.getenv('USERNAME')
+                password = System.getenv('TOKEN')
+            }
+        }
+    }
     publications {
         maven(MavenPublication) {
             groupId = 'com.github.sudarshan'
