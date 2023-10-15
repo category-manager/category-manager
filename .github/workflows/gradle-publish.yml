@@ -45,4 +45,4 @@ jobs:
       env:
         USERNAME: ${{ github.actor }}
         TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-        RELEASE_VERSION: ${{ GITHUB_REF_NAME }}
+        RELEASE_VERSION: ${{ github.ref_name }}
