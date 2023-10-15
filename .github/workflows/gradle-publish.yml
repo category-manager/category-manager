@@ -37,6 +37,8 @@ jobs:
         arguments: build
     - name: Set env
       uses: actions/checkout@v1
+      with:
+        arguments: publish
       run: echo ::set-env name=RELEASE_VERSION::$(echo ${GITHUB_REF:10})
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
