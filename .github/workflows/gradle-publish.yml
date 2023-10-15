@@ -9,7 +9,8 @@ name: Gradle Package
 
 on:
   push:
-    branches: [master]
+    tags:
+      - '*'
   release:
     types: [created]
 
