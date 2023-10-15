@@ -52,7 +52,7 @@ publishing {
         maven(MavenPublication) {
             groupId = 'com.github.sudarshan'
             artifactId = 'category-manager'
-            version = '0.0.1-BETA'
+            version = System.getenv('RELEASE_VERSION').isEmpty() ? '0.0.1-BETA': System.getenv('RELEASE_VERSION');
             from components.java
         }
     }
