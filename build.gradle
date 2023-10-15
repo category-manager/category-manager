@@ -1,5 +1,8 @@
 plugins {
     id 'java'
+    id 'java-library'
+    id 'signing'
+    id 'maven-publish'
 }
 
 group = 'com.github.sudarshan'
@@ -34,7 +37,26 @@ dependencies {
     implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.9'
     testImplementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j2-impl', version: '2.20.0'
 }
-
+publishing {
+    repositories {
+        maven {
+            name 'GitHubPackages'
+            url "https://maven.pkg.github.com/category-manager/category-manager"
+            credentials {
+                username = System.getenv('USERNAME')
+                password = System.getenv('TOKEN')
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.github.sudarshan'
+            artifactId = 'category-manager'
+            version = System.getenv('RELEASE_VERSION').isEmpty() ? '0.0.1-BETA': System.getenv('RELEASE_VERSION');
+            from components.java
+        }
+    }
+}
 tasks.named('test') {
     useJUnitPlatform()
 }
