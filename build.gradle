@@ -19,8 +19,8 @@ repositories {
         name 'GitHubPackages'
         url "https://maven.pkg.github.com/category-manager/category-manager"
         credentials {
-            username = System.getenv('GITHUB_ACTOR')
-            password = System.getenv('GITHUB_TOKEN')
+            username = System.getenv('USERNAME')
+            password = System.getenv('TOKEN')
         }
     }
 }
