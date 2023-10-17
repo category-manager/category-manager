@@ -1,11 +1,10 @@
-package com.github.sudarshan.categoryManager.core.impls;
+package com.github.sudarshan.categoryManager.core.sp;
 
-import com.github.sudarshan.categoryManager.core.interfaces.Data;
-import com.github.sudarshan.categoryManager.core.pojos.Categories;
-import com.github.sudarshan.categoryManager.core.pojos.CategoriesPaths;
-import com.github.sudarshan.categoryManager.core.pojos.PathResponse;
-import com.github.sudarshan.categoryManager.core.pojos.Utility;
-import com.github.sudarshan.categoryManager.core.interfaces.Export;
+import com.github.sudarshan.categoryManager.core.spi.Data;
+import com.github.sudarshan.categoryManager.core.pojo.Categories;
+import com.github.sudarshan.categoryManager.core.pojo.CategoriesPaths;
+import com.github.sudarshan.categoryManager.core.pojo.PathResponse;
+import com.github.sudarshan.categoryManager.core.spi.Export;
 
 import java.util.HashMap;
 
@@ -62,29 +61,31 @@ public class DefaultRestExportImpl implements Export<String, Node> {
             return categoriesPaths;
         PathResponse pathResponse = new PathResponse();
         var ancestorPaths = Utility.generateAncestorPaths(categoryId, allCategories);
+        var descendantPaths = Utility.generateDescendantPaths(categoryId, allCategories);
         pathResponse.setCategoryId(categoryId);
         pathResponse.getAncestorPaths().addAll(ancestorPaths);
+        pathResponse.getDescendantPaths().addAll(descendantPaths);
         categoriesPaths.getCategoriesPaths().add(pathResponse);
         return categoriesPaths;
     }
 
     @Override
-    public <Val> Val exportAllPaths() {
-        return null;
+    public CategoriesPaths exportAllPaths() {
+        return this.exportAllCategoryAncestorPathsAsJson();
     }
 
     @Override
-    public <Val> Val exportAll() {
-        return null;
+    public Categories exportAll() {
+        return this.exportAllCategoriesAsJson();
     }
 
     @Override
-    public <Val> Val exportById(String id) {
-        return null;
+    public Categories exportById(String id) {
+        return this.exportCategoryAsJson(id);
     }
 
     @Override
-    public <Val> Val exportPathById(String id) {
-        return null;
+    public CategoriesPaths exportPathById(String id) {
+        return this.exportPathsForCategoryAsJson(id);
     }
 }

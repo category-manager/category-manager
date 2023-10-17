@@ -1,12 +1,11 @@
-package com.github.sudarshan.categoryManager.core.impls;
+package com.github.sudarshan.categoryManager.core.sp;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.sudarshan.categoryManager.core.interfaces.Data;
-import com.github.sudarshan.categoryManager.core.interfaces.RealtimeOperation;
-import com.github.sudarshan.categoryManager.core.pojos.CoreConstants;
-import com.github.sudarshan.categoryManager.core.pojos.NodePresence;
-import com.github.sudarshan.categoryManager.core.pojos.PathResponse;
-import com.github.sudarshan.categoryManager.core.pojos.Utility;
+import com.github.sudarshan.categoryManager.core.spi.Data;
+import com.github.sudarshan.categoryManager.core.spi.RealtimeOperation;
+import com.github.sudarshan.categoryManager.core.pojo.CoreConstants;
+import com.github.sudarshan.categoryManager.core.pojo.NodePresence;
+import com.github.sudarshan.categoryManager.core.pojo.PathResponse;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;

@@ -1,13 +1,12 @@
-package com.github.sudarshan.categoryManager.core.client;
+package com.github.sudarshan.categoryManager.core.clientService;
 
-import com.github.sudarshan.categoryManager.core.impls.*;
-import com.github.sudarshan.categoryManager.core.interfaces.Export;
-import com.github.sudarshan.categoryManager.core.interfaces.Import;
-import com.github.sudarshan.categoryManager.core.interfaces.RealtimeOperation;
+import com.github.sudarshan.categoryManager.core.sp.*;
+import com.github.sudarshan.categoryManager.core.spi.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class CategoryManagerClient {
@@ -59,8 +58,8 @@ public class CategoryManagerClient {
                                                               String exportAllCategoryPathsQuery,
                                                               String exportCategoryPsQuery,
                                                               String exportCategoryPathsPsQuery,
-                                                              Function<PreparedStatement, PreparedStatement> exportCategoryPsMapper,
-                                                              Function<PreparedStatement, PreparedStatement> exportCategoryPathPsMapper) {
+                                                              BiFunction<PreparedStatement, ICategoryExportData, PreparedStatement> exportCategoryPsMapper,
+                                                              BiFunction<PreparedStatement, ICategoryPathExportData, PreparedStatement> exportCategoryPathPsMapper) {
             cmc.defaultExport = new DefaultDbExportImpl(cmc.dataImpl)
                     .configure(connection, exportAllCategoryQuery,
                             exportAllCategoryPathsQuery,exportCategoryPsQuery, exportCategoryPathsPsQuery, exportCategoryPsMapper, exportCategoryPathPsMapper);

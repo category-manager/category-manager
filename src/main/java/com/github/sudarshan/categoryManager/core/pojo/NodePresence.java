@@ -1,4 +1,4 @@
-package com.github.sudarshan.categoryManager.core.pojos;
+package com.github.sudarshan.categoryManager.core.pojo;
 
 public enum NodePresence {
     BOTH("both"), ONLY_LINKED("onlyLinked"), ONLY_UNLINKED("onlyUnlinked");

@@ -1,6 +1,4 @@
-package com.github.sudarshan.categoryManager.core.interfaces;
-
-import com.github.sudarshan.categoryManager.core.impls.Node;
+package com.github.sudarshan.categoryManager.core.spi;
 
 import java.util.HashSet;
 

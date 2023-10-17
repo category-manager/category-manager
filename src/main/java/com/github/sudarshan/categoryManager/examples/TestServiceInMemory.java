@@ -1,31 +1,33 @@
-package com.github.sudarshan.categoryManager.core;
-
+package com.github.sudarshan.categoryManager.examples;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.github.sudarshan.categoryManager.core.impls.DefaultData;
-import com.github.sudarshan.categoryManager.core.impls.DefaultRealtimeOperationImpl;
-import com.github.sudarshan.categoryManager.core.impls.Node;
-import com.github.sudarshan.categoryManager.core.pojos.CoreConstants;
-import com.github.sudarshan.categoryManager.core.pojos.PathResponse;
+import com.github.sudarshan.categoryManager.core.pojo.CoreConstants;
+import com.github.sudarshan.categoryManager.core.pojo.PathResponse;
+import com.github.sudarshan.categoryManager.core.sp.DefaultData;
+import com.github.sudarshan.categoryManager.core.sp.DefaultRealtimeOperationImpl;
+import com.github.sudarshan.categoryManager.core.sp.Node;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class TestApp {
+public class TestServiceInMemory {
     static DefaultData<String, Node> data;
     static HashMap<String, Node> linked;
     static HashMap<String, Node> unlinked;
     static HashMap<String, Node> roots;
-
     public static void main(String[] args) {
+        testInMemoryData();
+    }
+    private static void testInMemoryData() {
         data = new DefaultData<>();
         unlinked = data.getUnlinkedData();
         roots = data.getRootData();
         linked = data.getLinkedData();
         initializeData(data);
+
         DefaultRealtimeOperationImpl rop = new DefaultRealtimeOperationImpl(data);
 
         PathResponse pathResponse = rop.generatePathsForLinkedNodes(CoreConstants.HEAD_NODE_ID);
@@ -39,8 +41,8 @@ public class TestApp {
 
         pathResponse = rop.generatePathsForUnLinkedNodes(CoreConstants.UNLINKED_NODE_ID);
         System.out.println("unlinked paths\n" + pathResponse.getDescendantPaths());
-
     }
+
     private static void initializeData(DefaultData<String, Node> data) {
         /*
         DAG: directed acyclic graph.
@@ -139,5 +141,4 @@ public class TestApp {
         roots.put("cat2", cat2);
 
     }
-
 }

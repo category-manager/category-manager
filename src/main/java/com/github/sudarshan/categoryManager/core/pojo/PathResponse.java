@@ -1,6 +1,6 @@
-package com.github.sudarshan.categoryManager.core.pojos;
+package com.github.sudarshan.categoryManager.core.pojo;
 
-import com.github.sudarshan.categoryManager.core.impls.Node;
+import com.github.sudarshan.categoryManager.core.sp.Node;
 import lombok.Data;
 
 import java.util.ArrayList;

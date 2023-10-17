@@ -1,9 +1,8 @@
-package com.github.sudarshan.categoryManager.core.impls;
+package com.github.sudarshan.categoryManager.core.sp;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.github.sudarshan.categoryManager.core.interfaces.Data;
-import com.github.sudarshan.categoryManager.core.interfaces.Import;
-import com.github.sudarshan.categoryManager.core.pojos.CoreConstants;
+import com.github.sudarshan.categoryManager.core.spi.Data;
+import com.github.sudarshan.categoryManager.core.spi.Import;
+import com.github.sudarshan.categoryManager.core.pojo.CoreConstants;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,10 +10,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /*
  Design :
@@ -55,16 +53,29 @@ public class DefaultImportImpl implements Import<String, Node> {
         this.rowMapper = importRowMapper;
         return this;
     }
-    private void build(HashMap<String, Node> map) {
+    private Map<String, Set<String>> build(HashMap<String, Node> map) {
+        Map<String, Set<String>> missingParents = new HashMap<>();
         for (String key: map.keySet()) {
             Node currentNode = map.get(key);
+            if(currentNode.getParents().isEmpty()) {
+                currentNode.getParents().add(headNode.get_id());
+                this.headNode.getChildren().add(currentNode.get_id());
+            }
             currentNode.getParents().forEach(parent -> {
                 if(key.equals(parent)){
                     currentNode.getParents().clear();
                     currentNode.getParents().add(headNode.get_id());
                     headNode.getChildren().add(key);
                 }
-                map.get(parent).getChildren().add(currentNode.get_id());
+                if(map.containsKey(parent))
+                    map.get(parent).getChildren().add(currentNode.get_id());
+                else {
+                    if(missingParents.containsKey(key)) {
+                        missingParents.get(key).add(parent);
+                    } else {
+                        missingParents.put(key, new HashSet<>(){{ add(parent); }});
+                    }
+                }
             });
         }
         for (String key: map.keySet()) {
@@ -77,6 +88,7 @@ public class DefaultImportImpl implements Import<String, Node> {
                 this.roots.put(key, currentNode);
             this.linkedData.put(key, currentNode);
         }
+        return missingParents;
     }
 
     @Override
@@ -85,31 +97,25 @@ public class DefaultImportImpl implements Import<String, Node> {
         try(PreparedStatement ps = connection.prepareStatement(importQuery)) {
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                String id = rs.getString("id");
-                rowMapper = this.rowMapper(); // todo: remove this line, and local obj impl
-                Node node = rowMapper.apply(rs);
-                raw.put(id, node);
+                Node node = this.rowMapper.apply(rs);
+                raw.put(node.get_id(), node);
             }
         } catch(SQLException sqlException) {
             System.err.println(sqlException.getMessage());
         }
-        build(raw);
-    }
-    private Function<ResultSet, Node> rowMapper() {
-        return (rs) -> {
-            try {
-                String id = rs.getString("id");
-                JsonNode data = rs.getObject("data", JsonNode.class);
-                String[] parentCategoryIds = (String[]) rs.getArray("parent_category_ids").getArray();
-                Node node = new Node();
-                node.set_id(id);
-                node.setChildren(new HashSet<>());
-                node.setParents(new HashSet<>(Arrays.asList(parentCategoryIds)));
-                node.setData(data);
-                return node;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+        Map<String, Set<String>> missingParents = build(raw);
+        for (Map.Entry<String, Set<String>> entry: missingParents.entrySet()) {
+            String currentNodeId = entry.getKey();
+            Set<String> inValidParents = entry.getValue();
+            Set<String> validParents = raw.get(currentNodeId).getParents().stream()
+                    .filter(p -> !inValidParents.contains(p))
+                    .collect(Collectors.toSet());
+            if(validParents.isEmpty()) {
+                raw.get(currentNodeId).setParents(new HashSet<>(){{ add(headNode.get_id()); }});
+            } else {
+                raw.get(currentNodeId).setParents(new HashSet<>(validParents));
             }
-        };
+        }
+        System.out.println("imported " + raw.keySet().size() + " valid categories");
     }
 }

@@ -1,14 +1,15 @@
-package com.github.sudarshan.categoryManager.core.pojos;
+package com.github.sudarshan.categoryManager.core.sp;
 
+import com.github.sudarshan.categoryManager.core.pojo.CoreConstants;
 
-import com.github.sudarshan.categoryManager.core.impls.Node;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Utility {
     public static List<String> generateAncestorPaths(String nodeId, HashMap<String, Node> data) {
-        if(nodeId.equals(CoreConstants.HEAD_NODE_ID) || nodeId.equals(CoreConstants.UNLINKED_NODE_ID)) return List.of(nodeId);
+        if (nodeId.equals(CoreConstants.HEAD_NODE_ID) || nodeId.equals(CoreConstants.UNLINKED_NODE_ID))
+            return List.of(nodeId);
 
         List<List<String>> allPaths = new ArrayList<>();
         Stack<String> stack = new Stack<>();
@@ -18,20 +19,21 @@ public class Utility {
         stack.add(nodeId);
         visitedNodeAndPathMap.put(nodeId, List.of(nodeId));
 
-        while(!stack.empty()) {
+        while (!stack.empty()) {
             HashSet<String> parents = currentNode.getParents();
-            if(Objects.isNull(parents)) {
+            if (Objects.isNull(parents) || parents.isEmpty()) {
                 List<String> path;
-                if(Objects.isNull(visitedNodeAndPathMap.get(CoreConstants.UNLINKED_NODE_ID)))
+                if (Objects.isNull(visitedNodeAndPathMap.get(CoreConstants.UNLINKED_NODE_ID)))
                     path = visitedNodeAndPathMap.get(CoreConstants.HEAD_NODE_ID);
                 else
                     path = visitedNodeAndPathMap.get(CoreConstants.UNLINKED_NODE_ID);
                 allPaths.add(new ArrayList<>(path));
-                while(!stack.isEmpty() && visitedNodeAndPathMap.containsKey(stack.peek())){
-                    stack.pop();
-                    path.remove(path.size() -1);
+                while (!stack.isEmpty() && visitedNodeAndPathMap.containsKey(stack.peek())) {
+                    String poppedNodeId = stack.pop();
+                    if (path.get(path.size() - 1).equals(poppedNodeId))
+                        path.remove(path.size() - 1);
                 }
-                if(!stack.isEmpty()){
+                if (!stack.isEmpty()) {
                     List<String> parentNodePath = new ArrayList<>(visitedNodeAndPathMap.get(currentNode.get_id()));
                     currentNode = data.get(stack.peek());
                     parentNodePath.add(currentNode.get_id());
@@ -54,7 +56,7 @@ public class Utility {
     }
 
     public static List<String> generateDescendantPaths(String nodeId, HashMap<String, Node> data) {
-        if(Objects.isNull(nodeId) || !data.containsKey(nodeId)) {
+        if (Objects.isNull(nodeId) || !data.containsKey(nodeId)) {
             return new ArrayList<>();
         }
         List<List<String>> allPaths = new ArrayList<>();
@@ -64,7 +66,7 @@ public class Utility {
         Node currentNode;
         stack.push(nodeId);
 
-        while(!stack.empty()) {
+        while (!stack.empty()) {
             currentNode = data.get(stack.peek());
             visitedPath.add(currentNode.get_id());
             path.add(stack.peek());
@@ -72,9 +74,9 @@ public class Utility {
             stack.addAll(children);
             allPaths.add(new ArrayList<>(path));
 
-            if(currentNode.getChildren().isEmpty()) {
-                while(!stack.isEmpty() && visitedPath.contains(stack.peek())) {
-                    path.remove(path.size() -1);
+            if (currentNode.getChildren().isEmpty()) {
+                while (!stack.isEmpty() && visitedPath.contains(stack.peek())) {
+                    path.remove(path.size() - 1);
                     String visitedNode = stack.pop();
                     visitedPath.remove(visitedNode);
                 }

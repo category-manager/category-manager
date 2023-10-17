@@ -1,4 +1,4 @@
-package com.github.sudarshan.categoryManager.core.interfaces;
+package com.github.sudarshan.categoryManager.core.spi;
 
 import java.util.HashMap;
 

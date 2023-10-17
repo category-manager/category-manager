@@ -1,4 +1,4 @@
-package com.github.sudarshan.categoryManager.core.impls;
+package com.github.sudarshan.categoryManager.core.sp;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
