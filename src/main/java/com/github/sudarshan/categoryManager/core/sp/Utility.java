@@ -74,7 +74,7 @@ public class Utility {
             stack.addAll(children);
             allPaths.add(new ArrayList<>(path));
 
-            if (currentNode.getChildren().isEmpty()) {
+            if (children.isEmpty()) {
                 while (!stack.isEmpty() && visitedPath.contains(stack.peek())) {
                     path.remove(path.size() - 1);
                     String visitedNode = stack.pop();

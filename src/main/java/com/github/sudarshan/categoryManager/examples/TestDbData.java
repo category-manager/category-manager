@@ -57,9 +57,9 @@ public class TestDbData {
 
         // PERFORM TEST OPERATIONS
         dbImportClient.importData();
-        CategoriesPaths paths = (CategoriesPaths) restExportClient.exportPathById("cat4220483");
+        CategoriesPaths paths = (CategoriesPaths) restExportClient.exportPathById("cat4");
         Categories cats = (Categories) restExportClient.exportById(CoreConstants.HEAD_NODE_ID);
-        CategoriesPaths exportedDbPaths = (CategoriesPaths) dbExportClient.exportAllPaths();
+//        CategoriesPaths exportedDbPaths = (CategoriesPaths) dbExportClient.exportAllPaths();
 
         // VERIFY WITH CONSOLE OUTPUT
         cats.getCategoryList().forEach(cat -> {
@@ -67,10 +67,10 @@ public class TestDbData {
         });
         paths.getCategoriesPaths().forEach(p -> {
             System.out.println(p.getCategoryId() + "- ancestorPaths => " + p.getAncestorPaths());
-            System.out.println(p.getCategoryId() + "- descendantPaths => " + p.getDescendantPaths().size());
+            System.out.println(p.getCategoryId() + "- descendantPaths => " + p.getDescendantPaths());
         });
 
-        System.out.println("Exported paths for " + exportedDbPaths.getCategoriesPaths().size() + " categories");
+//        System.out.println("Exported paths for " + exportedDbPaths.getCategoriesPaths().size() + " categories");
     }
 
     private static BiFunction<PreparedStatement, ICategoryPathExportData, PreparedStatement> getExportCategoryPathPsMapper() {
