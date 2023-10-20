@@ -16,12 +16,16 @@ public class DefaultRealtimeOperationImpl implements RealtimeOperation<String, N
     private final HashMap<String, Node> unlinkedData;
     private final HashMap<String, Node> roots;
     private final Node headNode = new Node();
+    private final Node unlinkedNode = new Node();
     public DefaultRealtimeOperationImpl(Data<String, Node> data) {
         this.linkedData = data.getLinkedData();
         this.unlinkedData = data.getUnlinkedData();
+
         this.roots = data.getRootData();
         this.headNode.set_id(CoreConstants.HEAD_NODE_ID);
+        this.unlinkedNode.set_id(CoreConstants.UNLINKED_NODE_ID);
         this.linkedData.putIfAbsent(CoreConstants.HEAD_NODE_ID, this.headNode);
+        this.unlinkedData.putIfAbsent(CoreConstants.UNLINKED_NODE_ID, this.unlinkedNode);
     }
 
     private List<String> generatePaths(String nodeId, String pathType, HashMap<String, Node> data) {
@@ -74,9 +78,15 @@ public class DefaultRealtimeOperationImpl implements RealtimeOperation<String, N
             }
         });
     }
+
+    // NOTE: during update parents cannot be null or empty . if its a root node, then it should strictly
+    // contain only head as parent. unlinked as parent alone is also accepted.
     @Override
     public Node update(Node updatedNode) {
-        if(validateIfAlreadyPresent(updatedNode.get_id()) && areParentsPresent(updatedNode.getParents())) {
+        if(validateIfAlreadyPresent(updatedNode.get_id()) &&
+                areParentsPresent(updatedNode.getParents()) &&
+                validateForRootNode(updatedNode.getParents())) {
+
             HashSet<String> updatedParents = updatedNode.getParents();
             HashSet<String> currentParents;
             String nodeId = updatedNode.get_id();
@@ -149,6 +159,13 @@ public class DefaultRealtimeOperationImpl implements RealtimeOperation<String, N
             }
         }
         return updatedNode;
+    }
+
+    private boolean validateForRootNode(HashSet<String> parents) {
+        if(parents.contains(CoreConstants.HEAD_NODE_ID) || parents.contains(CoreConstants.UNLINKED_NODE_ID)) {
+            return parents.size() == 1;
+        }
+        return true;
     }
 
     private void relinkSubtree(NodePresence oldNodePresence, Node node) {
@@ -248,7 +265,11 @@ public class DefaultRealtimeOperationImpl implements RealtimeOperation<String, N
         return linkedData.containsKey(id) || unlinkedData.containsKey(id);
     }
     private boolean areParentsPresent(Set<String> ids) {
-        return ids.isEmpty() || ids.stream().noneMatch(id -> !(linkedData.containsKey(id) || unlinkedData.containsKey(id)));
+        if (ids.isEmpty()) {
+            return false;
+        }
+        boolean areParentsPresentInCorpus = ids.stream().allMatch(id -> linkedData.containsKey(id) || unlinkedData.containsKey(id));
+        return areParentsPresentInCorpus;
     }
 
     private long getCurrentNodeCount() {

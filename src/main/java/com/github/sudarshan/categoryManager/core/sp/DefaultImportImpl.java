@@ -39,13 +39,18 @@ public class DefaultImportImpl implements Import<String, Node> {
     @Setter
     private Connection connection;
     private final Node headNode = new Node();
+    private final Node unlinkedNode = new Node();
     public DefaultImportImpl(Data<String, Node> data) {
         this.data = data;
         this.linkedData = data.getLinkedData();
         this.unlinkedData = data.getUnlinkedData();
         this.roots = data.getRootData();
+
         this.headNode.set_id(CoreConstants.HEAD_NODE_ID);
+        this.unlinkedNode.set_id(CoreConstants.UNLINKED_NODE_ID);
+
         this.linkedData.putIfAbsent(CoreConstants.HEAD_NODE_ID, this.headNode);
+        this.unlinkedData.putIfAbsent(CoreConstants.UNLINKED_NODE_ID, this.unlinkedNode);
     }
     public DefaultImportImpl configure(Connection connection, String importQuery, Function<ResultSet, Node> importRowMapper){
         this.connection = connection;
@@ -93,6 +98,7 @@ public class DefaultImportImpl implements Import<String, Node> {
 
     @Override
     public void importData() {
+        flushAllExistingDataInMemory();
         HashMap<String, Node> raw = new HashMap<>();
         try(PreparedStatement ps = connection.prepareStatement(importQuery)) {
             ResultSet rs = ps.executeQuery();
@@ -117,5 +123,19 @@ public class DefaultImportImpl implements Import<String, Node> {
             }
         }
         System.out.println("imported " + raw.keySet().size() + " valid categories");
+    }
+
+    private void flushAllExistingDataInMemory() {
+        this.linkedData.clear();
+        this.unlinkedData.clear();
+        this.roots.clear();
+
+        // RE-INITIALIZE BASIC NODES
+        this.headNode.set_id(CoreConstants.HEAD_NODE_ID);
+        this.unlinkedNode.set_id(CoreConstants.UNLINKED_NODE_ID);
+
+        this.linkedData.putIfAbsent(CoreConstants.HEAD_NODE_ID, this.headNode);
+        this.unlinkedData.putIfAbsent(CoreConstants.UNLINKED_NODE_ID, this.unlinkedNode);
+
     }
 }

@@ -57,7 +57,22 @@ public class TestDbData {
 
         // PERFORM TEST OPERATIONS
         dbImportClient.importData();
-        CategoriesPaths paths = (CategoriesPaths) restExportClient.exportPathById("cat4");
+        Node node = new Node();
+        node.set_id("cat99");
+        node.getParents().add("cat7");
+        node.setData(null);
+        ropClient.add(node);
+
+        ropClient.delete(new HashSet<>(){{add("cat99");}});
+
+        System.out.println("\n\n");
+        node = new Node();
+        node.set_id("cat99");
+//        node.getParents().add(CoreConstants.HEAD_NODE_ID);
+        node.getParents().add("cat9");
+        ropClient.update(node);
+        CategoriesPaths paths = (CategoriesPaths) restExportClient.exportPathById("cat99");
+        System.out.println(restExportClient.exportById("cat99"));
         Categories cats = (Categories) restExportClient.exportById(CoreConstants.HEAD_NODE_ID);
 //        CategoriesPaths exportedDbPaths = (CategoriesPaths) dbExportClient.exportAllPaths();
 
