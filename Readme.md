@@ -1,18 +1,18 @@
 # CATEGORY MANAGER
 
 <h2>Table of contents</h2>
-- <a href="#overview">Overview</a>
-- <a href="#purpose">Purpose and Problem statement</a>
-- <a href="#features">Capability and features</a>
-- <a href="#design">Design architecture and LLD</a>
-- <a href="#configurability">Configurability</a>
-- <a href="#concepts">Brief on concepts, algorithms used in the library</a>
-- <a href="#usage">Usage (Builder, Client, Operations)</a>
-- <a href="#extension">Extending the library features</a>
-- <a href="#example">Example Project Reference</a>
-- <a href="#future-plans">Future release plans</a>
-- <a href="#thank-you-note">Thank you note</a>
-- <a href="#contact">Contact details</a>
+<li><a href="#overview">Overview</a></li>
+<li> <a href="#purpose">Purpose and Problem statement</a></li>
+<li> <a href="#features">Capability and features</a></li>
+<li> <a href="#design">Design architecture and LLD</a></li>
+<li> <a href="#configurability">Configurability</a></li>
+<li> <a href="#concepts">Brief on concepts, algorithms used in the library</a></li>
+<li> <a href="#usage">Usage (Builder, Client, Operations)</a></li>
+<li> <a href="#extension">Extending the library features</a></li>
+<li> <a href="#example">Example Project Reference</a></li>
+<li> <a href="#future-plans">Future release plans</a></li>
+<li> <a href="#thank-you-note">Thank you note</a></li>
+<li> <a href="#contact">Contact details</a></li>
 
 ##### <hr>
 <div id="overview">
