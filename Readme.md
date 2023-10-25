@@ -1,5 +1,5 @@
 # CATEGORY MANAGER
-##### <hr>
+
 <h2>Table of contents</h2>
 - <a href="#overview">Overview</a>
 - <a href="#purpose">Purpose and Problem statement</a>
