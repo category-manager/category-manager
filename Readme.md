@@ -2,12 +2,12 @@
 
 <h2>Table of contents</h2>
 <li><a href="#overview">Overview</a></li>
+<li> <a href="#usage">Usage (Setup, Builder, Client, Operations)</a></li>
 <li> <a href="#purpose">Purpose and Problem statement</a></li>
 <li> <a href="#features">Capability and features</a></li>
 <li> <a href="#design">Design architecture and LLD</a></li>
 <li> <a href="#configurability">Configurability</a></li>
 <li> <a href="#concepts">Brief on concepts, algorithms used in the library</a></li>
-<li> <a href="#usage">Usage (Builder, Client, Operations)</a></li>
 <li> <a href="#extension">Extending the library features</a></li>
 <li> <a href="#example">Example Project Reference</a></li>
 <li> <a href="#future-plans">Future release plans</a></li>
@@ -22,6 +22,112 @@
     information of your business in memory of your application. And also export the same across systems through rest API's to maintain 
     data consistency across systems and databases.
 </p>
+</div>
+
+##### <hr>
+<div id="usage">
+<h3> Usage </h3>
+<h4>Setup</h4>
+
+First export USERNAME=YOU_GITHUB_USERNAME and TOKEN=GITHUB_PRIVATE_TOKEN with package read privilages
+
+Add the below dependency in your maven POM file
+
+    <dependency>
+      <groupId>com.github.sudarshan</groupId>
+      <artifactId>category-manager</artifactId>
+      <version>0.1.0-BETA</version>
+    </dependency>
+
+If you are using Gradle, add this to your dependency
+
+        implementation "com.github.sudarshan:category-manager:${categoryManagerVersion}"
+
+<h4>Builder config </h4>
+
+        CategoryManagerClient
+            .getBuilder()
+            .configureImport(connection, IMPORT_SQL, getImportRowMapper())
+            .configureDbExport(
+                connection,
+                EXPORT_ALL_CATEGORY_SQL,
+                EXPORT_CATEGORY_ALL_PATH_SQL,
+                EXPORT_CATEGORY_SQL,
+                EXPORT_CATEGORY_PATH_SQL,
+                getExportCategoryPsMapper(),
+                getExportCategoryPathPsMapper()
+            );
+
+<h4>Export Configs </h4>
+
+    private static BiFunction<PreparedStatement, ICategoryPathExportData, PreparedStatement> getExportCategoryPathPsMapper() {
+        return (ps, data) -> {
+            try {
+                Connection connection = ps.getConnection();
+                DefaultCategoryPathExportData d = (DefaultCategoryPathExportData)data;
+                String categoryId = d.getCategoryId();
+                List<String> ancestorPaths = d.getAncestorPaths();
+                ps.setString(1, categoryId);
+                ps.setArray(2, connection.createArrayOf("text", ancestorPaths.toArray()));
+                ps.setTimestamp(3, new Timestamp(ZonedDateTime.now().toInstant().toEpochMilli()), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+                ps.setTimestamp(4, new Timestamp(ZonedDateTime.now().toInstant().toEpochMilli()), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+
+            } catch(SQLException sqlException) {
+                log.error(sqlException.getMessage());
+            }
+            return ps;
+        } ;
+    }
+
+    private static BiFunction<PreparedStatement, ICategoryExportData, PreparedStatement> getExportCategoryPsMapper() {
+        return (ps, data) -> {
+            try {
+                var d = (DefaultCategoryExportData)data;
+                String categoryId = d.getCategoryId();
+                Node node = d.getNode();
+                Connection connection = ps.getConnection();
+                ps.setString(1, categoryId);
+                ps.setString(2, node.getData().toString());
+                ps.setArray(3, connection.createArrayOf("text",node.getParents().toArray()));
+                ps.setArray(4, connection.createArrayOf("text",node.getChildren().toArray()));
+                ps.setTimestamp(5, new Timestamp(ZonedDateTime.now().toInstant().toEpochMilli()), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+                ps.setTimestamp(6, new Timestamp(ZonedDateTime.now().toInstant().toEpochMilli()), Calendar.getInstance(TimeZone.getTimeZone("UTC")));
+
+            } catch (SQLException sqlException) {
+                log.error(sqlException.getMessage());
+            }
+            return ps;
+        } ;
+    }
+<h4>Import Configs </h4>
+    
+    private Function<ResultSet, Node> getImportRowMapper() {
+        return (rs) -> {
+            Node node = new Node();
+            try {
+                String id = rs.getString("id");
+                String name = rs.getString("name");
+                var mapper = new ObjectMapper();
+                var objNode = mapper.createObjectNode();
+                objNode.put("name", name);
+                JsonNode data = objNode;
+                String[] parentCategoryIds = (String[]) rs.getArray("parent_category_ids").getArray();
+                if(Objects.isNull(parentCategoryIds)) {
+                    parentCategoryIds = new String[0];
+                    log.info("found null as parent for {}",id);
+                }
+                node.set_id(id);
+                node.setChildren(new HashSet<>());
+                node.setParents(new HashSet<>(Arrays.asList(parentCategoryIds)));
+                node.setData(data);
+                return node;
+            } catch (SQLException e) {
+                log.error(e.getMessage());
+            }
+            return node;
+        };
+    }
+
 </div>
 
 ##### <hr>
