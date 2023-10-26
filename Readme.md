@@ -160,10 +160,13 @@ or export paths for all categories at once to get a dump in json format or into 
 <div id="design">
 <h3>Design architecture and LLD</h3>
 <br>
-<img alt="Design Diagram" src="./assets/design.png"></img>
+<img alt="Design Diagram" src="./assets/cm-design.png"></img>
 <br>
 Design / architecture
 <br>
+<img alt="Design Diagram" src="./assets/cm-er.png"></img>
+<br>
+Core spi
 <img alt="Design Diagram" src="./assets/cm-topology.png"></img>
 Project files structure
 <br>
