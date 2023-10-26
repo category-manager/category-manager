@@ -146,13 +146,17 @@ Category manager provides solution to achieve all these.
 <div id="features">
 <h3> Capability and features </h3>
 <p>
+<li>
 With this library, you import your existing data from database directly into memory to construct in-memory data-structure,
 further you can make CRUD operations on the data imported. 
-<br>
-You can also export the data that is in-memory to other database or table or get the export of category information as JSON. 
-<br>
+</li>
+<li>
+You can also export the data that is in-memory to other database or table in within the same DB or get the export of category information as Json. 
+</li>
+<li>
 The Library gives the feature to generate the ancestor and descendant paths for any given category/key.
-or export paths for all categories at once to get a dump in json format or into database table.
+or export paths for all categories at once to get a dump in Json format or into database table.
+</li>
 </p>
 </div>
 
@@ -164,33 +168,47 @@ or export paths for all categories at once to get a dump in json format or into 
 <br>
 Design / architecture
 <br>
-<img alt="Design Diagram" src="./assets/cm-er.png"></img>
-<br>
-Core spi
-<img alt="Design Diagram" src="./assets/cm-topology.png"></img>
-Project files structure
-<br>
 <p>
 <li>
-    Import, Export, RealtimeOperation, Data these are the interfaces which define the structure and features provided by 
+<b> Import, Export, RealtimeOperation, Data </b> these are the interfaces which define the structure and features provided by 
     its service providers.
 </li>
 <li>
-    ClientManagerClientBuilder is used to configure the Import, Export operations. These configuration involve db connection object, 
-    db-import query, row mappers for imports and export-db-query and prepared statement mappers for exports respectively.
+    <b> ClientManagerClientBuilder </b> is used to configure the Import, Export operations. These configuration involve <i>db connection object, 
+    db-import query, row mappers for imports and export-db-query and prepared statement mappers for exports respectively.</i>
 </li>
-    CategoryManagerClient gives you access to operations objects to perform import, export, realtime operations on the data.
 <li>
-    Import operation, reads, builds in-memory data-structure for the data imported and make it global for other operations
+    <b> CategoryManagerClient </b> gives you access to operations objects to perform import, export, realtime operations on the data.
+</li>
+</p>
+<br>
+<img alt="Design Diagram" src="./assets/cm-er.png"></img>
+<br>
+Core spi
+<br>
+<p>
+<li>
+<b> Import operation </b>, reads, builds in-memory data-structure for the data imported and make it global for other operations
     to operate on.
 </li>
-    Export operation has 2 default implementation. 1. RestExport 2. DbExport
-    <br>
-    With rest export you can retrieve information regarding any category that is in-memory, generate its ancestor and 
-    descendant paths in the JSON format.
-    <br>
-    Db export basically does similar operation as Rest Export, and exports the generated data into Db tables as configured.
+<li>
+<b> Export operation  has 2 default implementation. 1. RestExport 2. DbExport. </b>
+With rest export you can retrieve information regarding any category that is in-memory, generate its ancestor and 
+descendant paths in the JSON format.
+</li>
+<li>
+<b> Db export </b> basically does similar operation as Rest Export, and exports the generated data into Db tables as configured.
+</li>
+<li>
+<b>Realtime operation </b> lets you do add, update, delete the nodes at highest abstraction level, but the underneath involves the concept of NodePresence,
+the way we classify the data, relinking the sub-tree/graph on each operation which will be discussed further in the concepts section of this page. 
+</li>
 </p>
+<br>
+<img alt="Design Diagram" src="./assets/cm-topology.png"></img>
+Project files structure
+<br>
+
 </div>
 
 ##### <hr>
