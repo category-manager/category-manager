@@ -162,6 +162,11 @@ or export paths for all categories at once to get a dump in json format or into 
 <br>
 <img alt="Design Diagram" src="./assets/design.png"></img>
 <br>
+Design / architecture
+<br>
+<img alt="Design Diagram" src="./assets/cm-topology.png"></img>
+Project files structure
+<br>
 <p>
 <li>
     Import, Export, RealtimeOperation, Data these are the interfaces which define the structure and features provided by 
