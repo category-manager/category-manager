@@ -146,23 +146,26 @@ Category manager provides solution to achieve all these.
 <div id="features">
 <h3> Capability and features </h3>
 <p>
+<b> You can ,</b>
 <li>
-With this library, you import your existing data from database directly into memory to construct in-memory data-structure,
-further you can make CRUD operations on the data imported. 
+    Import your existing hierarchical data from Db. Or start from scratch - build the hierarchy structure using Rest API wrapper around this library.
+    I've already provided you with a <a href="https://github.com/category-manager/category-manager-ui" target="_blank"> descent UI tool</a>
+    with <a href="https://github.com/category-manager/product-details"> springboot backend </a> to get started .
 </li>
 <li>
-You can also export the data that is in-memory to other database or table in within the same DB or get the export of category information as Json. 
+    Perform realtime CRUD operation on the data.
 </li>
 <li>
-The Library gives the feature to generate the ancestor and descendant paths for any given category/key.
-or export paths for all categories at once to get a dump in Json format or into database table.
+    Export node information, Export Paths.
+<br>
+    Export could be a Json to serve API request or into any database table. 
 </li>
 </p>
 </div>
 
 ##### <hr>
 <div id="design">
-<h3>Design architecture and LLD</h3>
+<h3>Design / architecture </h3>
 <br>
 <img alt="Design Diagram" src="./assets/cm-design.png"></img>
 <br>
@@ -215,7 +218,14 @@ Project files structure
 <div id="configurability">
 <h3>Configurability</h3>
 <p>
-
+    &nbsp As discussed above, these interfaces are merely a specification, you can implement your own classes suiting your 
+    requirements if any.
+    Or you simply extend the existing DefaultImplementation and override subset of the methods.
+<br>    
+    &nbsp As of now you cannot register your implementation into clientManager , meaning you would have to implement clientManager
+    if you decide to go with your implementation for any operations.
+<br>
+In future release you will be able to register your implementation of any operation into the operations registry which will be provided.  
 </p>
 </div>
 
