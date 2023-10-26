@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS public.category_v2
 insert into category( id, parent_category_ids)
 values
 ('category-manager', '{"head"}'::text[]),
-('core', '{"catgory-manager"}'::text[]),
+('core', '{"category-manager"}'::text[]),
 ('clientService', '{"core"}'::text[]),
 ('pojo', '{"core"}'::text[]),
 ('sp', '{"core"}'::text[]),
