@@ -368,7 +368,7 @@ cat4 is a linked node and cat5 in an unlinked node.
     <h3>Let's Stay Connected !! </h3>
     <ul>
         <li>
-            Here is the link to my <a href="" target="_blank"> LinkedIn </a>
+            Here is the link to my <a href="https://www.linkedin.com/in/sudarshan-bhat-52052a173/" target="_blank"> LinkedIn </a>
         </li>
         <li>
             You can write to me <a href="mailto:sudarshanrbhat.srb2@gmail.com" target="_blank"> on Gmail  </a>
