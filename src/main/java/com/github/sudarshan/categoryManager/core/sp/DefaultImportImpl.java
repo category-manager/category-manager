@@ -62,12 +62,18 @@ public class DefaultImportImpl implements Import<String, Node> {
         Map<String, Set<String>> missingParents = new HashMap<>();
         for (String key: map.keySet()) {
             Node currentNode = map.get(key);
+            // if parents are empty
             if(currentNode.getParents().isEmpty()) {
                 currentNode.getParents().add(headNode.get_id());
                 this.headNode.getChildren().add(currentNode.get_id());
+            } else if(currentNode.getParents().size() == 1) {   // if `head`, `unlinked` are explicitly specified.
+                if(currentNode.getParents().contains(CoreConstants.HEAD_NODE_ID))
+                    this.headNode.getChildren().add(key);
+                else if(currentNode.getParents().contains(CoreConstants.UNLINKED_NODE_ID))
+                    this.unlinkedNode.getChildren().add(key);
             }
             currentNode.getParents().forEach(parent -> {
-                if(key.equals(parent)){
+                if(key.equals(parent)){ // if nodeId == parentId
                     currentNode.getParents().clear();
                     currentNode.getParents().add(headNode.get_id());
                     headNode.getChildren().add(key);
