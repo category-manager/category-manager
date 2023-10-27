@@ -7,11 +7,14 @@ import com.github.sudarshan.categoryManager.core.pojo.CoreConstants;
 import com.github.sudarshan.categoryManager.core.pojo.NodePresence;
 import com.github.sudarshan.categoryManager.core.pojo.PathResponse;
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class DefaultRealtimeOperationImpl implements RealtimeOperation<String, Node> {
+    private Logger log = LoggerFactory.getLogger(DefaultRealtimeOperationImpl.class);
     private final HashMap<String, Node> linkedData;
     private final HashMap<String, Node> unlinkedData;
     private final HashMap<String, Node> roots;

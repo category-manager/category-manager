@@ -5,6 +5,8 @@ import com.github.sudarshan.categoryManager.core.spi.Import;
 import com.github.sudarshan.categoryManager.core.pojo.CoreConstants;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 
 */
 public class DefaultImportImpl implements Import<String, Node> {
+    private Logger log = LoggerFactory.getLogger(DefaultImportImpl.class);
     private Data<String, Node> data;
     private HashMap<String, Node> linkedData;
     private HashMap<String, Node> unlinkedData;
@@ -113,7 +116,7 @@ public class DefaultImportImpl implements Import<String, Node> {
                 raw.put(node.get_id(), node);
             }
         } catch(SQLException sqlException) {
-            System.err.println(sqlException.getMessage());
+           log.error(sqlException.getMessage());
         }
         Map<String, Set<String>> missingParents = build(raw);
         for (Map.Entry<String, Set<String>> entry: missingParents.entrySet()) {
@@ -128,7 +131,7 @@ public class DefaultImportImpl implements Import<String, Node> {
                 raw.get(currentNodeId).setParents(new HashSet<>(validParents));
             }
         }
-        System.out.println("imported " + raw.keySet().size() + " valid categories");
+        log.info("imported " + raw.keySet().size() + " valid categories");
     }
 
     private void flushAllExistingDataInMemory() {

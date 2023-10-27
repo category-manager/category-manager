@@ -5,18 +5,17 @@ import com.github.sudarshan.categoryManager.core.pojo.*;
 import com.github.sudarshan.categoryManager.core.spi.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.*;
 import java.util.function.BiFunction;
 
-import static com.github.sudarshan.categoryManager.core.pojo.CoreConstants.EXPORT_CATEGORY_PATH_SQL;
-import static com.github.sudarshan.categoryManager.core.pojo.CoreConstants.EXPORT_CATEGORY_SQL;
-
 @Getter
 @Setter
 public class DefaultDbExportImpl implements Export<String, Node> {
-
+    private Logger log = LoggerFactory.getLogger(DefaultDbExportImpl.class);
     private final HashMap<String, Node> linkedData;
     private final HashMap<String, Node> unlinkedData;
     private String exportAllCategoryQuery;
@@ -65,7 +64,7 @@ public class DefaultDbExportImpl implements Export<String, Node> {
             categories.getCategoryList().add(allCategories.get(categoryId));
             return categories;
         } catch(SQLException sqlException ) {
-            System.err.println(sqlException.getMessage());
+            log.error(sqlException.getMessage());
         }
         return categories;
     }
@@ -86,9 +85,10 @@ public class DefaultDbExportImpl implements Export<String, Node> {
                 ps.addBatch();
             }
             int[] result = ps.executeBatch();
-            System.out.println("batch exported " + result.length + " categories");
+
+            log.info("batch exported " + result.length + " categories");
         } catch(SQLException sqlException ) {
-            System.err.println(sqlException.getMessage());
+            log.error(sqlException.getMessage());
         }
         return categories;
     }
@@ -109,7 +109,7 @@ public class DefaultDbExportImpl implements Export<String, Node> {
             categoriesPaths.getCategoriesPaths().add(pathResponse);
             return categoriesPaths;
         } catch(SQLException sqlException ) {
-            System.err.println(sqlException.getMessage());
+            log.error(sqlException.getMessage());
         }
         return categoriesPaths;
     }
@@ -141,9 +141,9 @@ public class DefaultDbExportImpl implements Export<String, Node> {
                 ps.addBatch();
             }
             int[] result = ps.executeBatch();
-            System.out.println("batch exported paths for " + result.length + " categories");
+            log.info("batch exported paths for " + result.length + " categories");
         } catch(SQLException sqlException ) {
-            System.err.println(sqlException.getMessage());
+            log.error(sqlException.getMessage());
         }
         return categoriesPaths;
     }

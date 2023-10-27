@@ -5,10 +5,13 @@ import com.github.sudarshan.categoryManager.core.pojo.Categories;
 import com.github.sudarshan.categoryManager.core.pojo.CategoriesPaths;
 import com.github.sudarshan.categoryManager.core.pojo.PathResponse;
 import com.github.sudarshan.categoryManager.core.spi.Export;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
 public class DefaultRestExportImpl implements Export<String, Node> {
+    private Logger log = LoggerFactory.getLogger(DefaultRestExportImpl.class);
 
     private HashMap<String, Node> linkedData;
     private HashMap<String, Node> unlinkedData;
