@@ -26,7 +26,7 @@
 <div id="usage">
 <h3> Setup </h3>
 
-First export USERNAME=YOU_GITHUB_USERNAME and TOKEN=GITHUB_PRIVATE_TOKEN with package read privilages
+First export USERNAME=YOUR_GITHUB_USERNAME and TOKEN=GITHUB_PRIVATE_TOKEN with package read privilages
 
 Add the below dependency in your maven POM file
 
